@@ -1,0 +1,193 @@
+body {
+ font-family: 'Segoe UI', sans-serif;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  background-image: url("photo.avif");
+ 
+}
+
+
+
+nav {
+  background:white;
+  color:black;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+h1 {
+  color: black;
+}
+
+
+nav h1 {
+  margin:0;
+  
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 15px;
+}
+
+nav ul li a {
+  color:aliceblue;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.page {
+  display: none;
+  padding: 20px;
+}
+
+.page.active {
+  display: block;
+}
+/* Change size */
+.fa-circle-user {
+  font-size: 40px;   /* Bigger size */
+}
+
+/* Change color */
+.fa-circle-user {
+  color: #2c3e50;    /* Dark blue/gray */
+}
+
+/* Hover effect */
+.fa-circle-user:hover {
+  color: #27ae60;    /* Green on hover */
+  cursor: pointer;
+  transform: scale(1.1);  /* Slight zoom effect */
+  transition: 0.3s;
+}
+
+
+.menu {
+    position: relative;
+    margin-right: 20px;
+}
+
+.menu-btn {
+    background: none;
+    border: none;
+    color: black;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    background: black;
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+}
+
+.dropdown li {
+    padding: 10px;
+}
+
+.dropdown li a {
+    color: white;
+    text-decoration: none;
+}
+
+.menu:hover .dropdown {
+    display: block;
+}
+.contact {
+    text-align: center;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 300px;
+  align-items:center;
+  margin:auto;
+  
+}
+/* Style the h1 inside the form */
+form h1 {
+  color: white;
+  text-align: center;
+}
+
+
+input, button {
+  padding: 10px;
+  font-size: 20px;
+}
+button {
+  background:orange;
+  color:white;
+  border: none;
+  cursor: pointer;
+}
+button:hover {
+  background: darkorange;
+}
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #007BFF; /* Bootstrap blue */
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  background-color: #004494;
+  transform: translateY(0);
+}
+
+
+footer {
+  background: rgb(13,14,15);
+  color: white;
+  
+  text-align: center;
+  padding: 8px ;
+  position: absolute;
+  justify-content: space-between;
+  width: 100%;
+  bottom:0px;
+}
+
+.social-links {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.social-links a {
+    color: var(--text);
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    color: var(--accent);
+    transform: translateY(-3px);
+}

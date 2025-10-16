@@ -1,0 +1,284 @@
+<?php
+ session_start();
+
+ // Redirect to login if user not logged in
+ if (!isset($_SESSION['user_id'])) {
+    header("Location: login.html");
+    exit();
+  }
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sports Tracker - Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" 
+  integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+  crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <style>
+            @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+* {
+    /* dashboard.css */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background:url("photo.avif");
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+/* Header */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background:black;
+  color: white;
+  padding: 15px 30px;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-info button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  background: #e74c3c;
+  color: wheat;
+  cursor: pointer;
+}
+
+.user-info button:hover {
+  background: #c0392b;
+}
+/* Profile Icon */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;   /* Space between icon, name, and logout */
+}
+
+.user-icon {
+  font-size: 32px;
+  color:wheat;   /* Light gray for header */
+  transition: 0.3s;
+}
+
+.user-icon:hover {
+  color: #27ae60;   /* Green hover effect */
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+#welcomeUser {
+  font-weight: bold;
+  font-size: 16px;
+  color: #ecf0f1;
+}
+
+/* Dashboard Layout */
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  padding: 20px 40px;
+}
+
+/* Sections */
+section {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+h2 {
+  color:black;
+  margin-bottom: 10px;
+}
+
+/* Profile */
+.profile p {
+  margin: 8px 0;
+  font-size: 15px;
+}
+
+/* Stats */
+.stats p {
+  margin: 6px 0;
+  font-weight: bold;
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+table th, table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+table th {
+  background: #2c3e50;
+  color: white;
+}
+
+table tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+/* Form */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+form input, form select, form button {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+form button {
+  background: #27ae60;
+  color:wheat;
+  cursor: pointer;
+}
+
+form button:hover {
+  background: #219150;
+}
+
+#workoutMessage {
+  margin-top: 10px;
+  font-style: italic;
+  color: #27ae60;
+}
+
+/* Chart */
+canvas {
+  margin-top: 15px;
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+}
+}
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="app-header">
+    <h1>🏆 MySport Tracker</h1>
+   
+    <div class="user-info">
+      
+        <ul class="dropdown">
+                <li><a href="home.html" onclick="showPage('home')">Home</a></li>
+               
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li> 
+            </ul>
+      <span id="welcomeUser"></span>
+      <button id="logoutBtn">Logout</button>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  </header>
+
+  <!-- DASHBOARD CONTENT -->
+  <main class="dashboard">
+
+    <!-- Profile Section -->
+    <section class="profile">
+      <h2>👤 Profile</h2>
+      <p><strong>Name:</strong> <span id="profileName"></span></p>
+      <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+      <p><strong>Total Workouts:</strong> <span id="profileWorkouts">0</span></p>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+      <h2>📊 Stats</h2>
+      <p>Total Workouts: <span id="totalWorkouts">0</span></p>
+      <p>Hours This Week: <span id="hoursWeek">0</span></p>
+      <p>Calories Burned: <span id="calories">0</span></p>
+    </section>
+
+    <!-- Workouts Table -->
+    <section>
+      <h2>Recent Workouts</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Sport</th><th>Duration</th><th>Notes</th><th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="workoutTable"></tbody>
+      </table>
+    </section>
+
+    <!-- Add Workout -->
+    <section>
+      <h2>Add Workout</h2>
+      <form id="workoutForm">
+        <select id="sportType" required>
+          <option value="">--Choose sport--</option>
+          <option>Running</option>
+          <option>Cycling</option>
+          <option>Football</option>
+          <option>Gym</option>
+          <option>swimming</option>
+          <option>Yoga</option>
+          <option>Hiking</option>
+        </select>
+        <input type="number" id="duration" placeholder="Duration(hours)" required>
+        <input type="date" id="workoutDate" name="workoutDate" required>
+        <input type="text" id="notes" placeholder="Notes">
+        <button type="submit">Add Workout</button>
+      </form>
+      <p id="workoutMessage"></p>
+    </section>
+
+    <!-- Workout Trends -->
+    <section>
+      <h2>Workout Trends</h2>
+      <canvas id="workoutChart" width="400" height="200"></canvas>
+    </section>
+
+  </main>
+  <script src="dashboard.js"></script>
+  <script>document.getElementById('logoutBtn').addEventListener('click', function () {
+    if (confirm("Are you sure you want to log out?")) {
+    localStorage.removeItem('loggedInUser');
+    window.location.href = 'home.html';}
+    });
+  </script>
+</body>
+</html>
